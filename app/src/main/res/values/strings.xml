@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Agro Consult</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up\n</string>
+    <string name="new_farmer">New Farmer</string>
+    <string name="already_farmer">Already Farmer</string>
+</resources>
