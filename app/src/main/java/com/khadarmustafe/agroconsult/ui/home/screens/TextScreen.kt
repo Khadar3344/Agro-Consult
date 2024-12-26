@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.khadarmustafe.agroconsult.components.CustomDefaultBtn
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,16 +73,9 @@ fun TextScreen(title: String, navController: NavController) {
                         .fillMaxWidth(),
                     textStyle = MaterialTheme.typography.bodyMedium
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = {
-                        // Handle sending the text here
-                        println("Sending text: $text")
-                        // You can add your sending logic (e.g., network request) here
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Send")
+                Spacer(modifier = Modifier.height(30.dp))
+                CustomDefaultBtn(shapeSize = 50f, btnText = "Send") {
+                    // Handle send button click
                 }
             }
         }
