@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.khadarmustafe.agroconsult.R
 import com.khadarmustafe.agroconsult.components.DashboardCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,15 +59,15 @@ fun DashboardScreen(navController: NavHostController) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    DashboardCard("Image", navController, "image", color = Color.Blue)
-                    DashboardCard("Video", navController, "video", color = Color.Red)
+                    DashboardCard("Image", navController, "image", color = Color.Blue, imageResId = R.drawable.ic_image)
+                    DashboardCard("Video", navController, "video", color = Color.Red, imageResId =  R.drawable.ic_video)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    DashboardCard("Voice", navController, "voice", color = Color.Magenta)
-                    DashboardCard("Text", navController, "text", color = Color.DarkGray)
+                    DashboardCard("Voice", navController, "voice", color = Color.Magenta, imageResId = R.drawable.ic_voice)
+                    DashboardCard("Text", navController, "text", color = Color.DarkGray, imageResId = R.drawable.ic_text)
                 }
             }
         }
