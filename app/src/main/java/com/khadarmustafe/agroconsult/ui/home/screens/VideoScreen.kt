@@ -62,7 +62,7 @@ fun VideoScreen(title: String, navController: NavController) {
                         .height(300.dp)
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .clickable { },
+                        .clickable { navController.navigate("videoRecorder")},
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.LightGray)
                 ) {
