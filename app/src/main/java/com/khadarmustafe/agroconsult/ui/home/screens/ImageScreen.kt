@@ -1,10 +1,12 @@
 package com.khadarmustafe.agroconsult.ui.home.screens
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -38,7 +41,11 @@ import com.khadarmustafe.agroconsult.components.CustomDefaultBtn
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ImageScreen(title: String, navController: NavController) {
+fun ImageScreen(
+    title: String,
+    navController: NavController,
+    bitmap: Bitmap?
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -64,20 +71,33 @@ fun ImageScreen(title: String, navController: NavController) {
                         .height(300.dp)
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .clickable { },
+                        .clickable { navController.navigate("camera")},
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.LightGray)
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    if (bitmap != null) {
+                        // Display the image if it's available
                         Image(
-                            painter = painterResource(id = R.drawable.ic_image),
-                            contentDescription = "Image",
-                            modifier = Modifier.fillMaxWidth(),
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "Captured Image",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f),
                             contentScale = ContentScale.Crop
                         )
+                    } else {
+                        // Placeholder if no image is captured
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_image),
+                                contentDescription = "Image",
+                                modifier = Modifier.fillMaxWidth(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(30.dp))
@@ -91,10 +111,4 @@ fun ImageScreen(title: String, navController: NavController) {
             }
         }
     )
-}
-
-@Preview
-@Composable
-private fun ImageScreenPreview() {
-    ImageScreen(title = "Image Screen", navController = NavController(LocalContext.current))
 }
