@@ -18,12 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.khadarmustafe.agroconsult.components.CustomAppBar
 import com.khadarmustafe.agroconsult.components.CustomDefaultBtn
 
 @Composable
-fun RegionSelectionScreen() {
-    val regions = listOf("North", "East", "South", "West", "Central")
+fun RegionSelectionScreen(navController: NavController) {
+    val regions = listOf("Awdal", "Saaxil", "Maroodi-jeex", "Togdheer", "Sool", "Sanaag")
     val selectedRegion = remember { mutableStateOf<String?>(null) }
 
     Column(
@@ -33,7 +34,7 @@ fun RegionSelectionScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CustomAppBar(
-            onBackBtnClick = { /* Handle back button click */ },
+            onBackBtnClick = { navController.navigateUp() },
             appBarTitle = "Region Selection"
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -67,13 +68,6 @@ fun RegionSelectionScreen() {
         CustomDefaultBtn(
             shapeSize = 50f,
             btnText = "Continue"
-        ) { }
-
+        ) { navController.navigate("user_type") }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun RegionSelectionScreenPreview() {
-    RegionSelectionScreen()
 }

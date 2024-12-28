@@ -1,5 +1,6 @@
 package com.khadarmustafe.agroconsult.ui.auth.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,11 +24,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.khadarmustafe.agroconsult.components.CustomDefaultBtn
 
 @Composable
-fun AlreadyFarmerScreen(modifier: Modifier = Modifier) {
+fun AlreadyFarmerScreen(navController: NavController) {
     var selectedAmount by remember { mutableStateOf("") }
 
     var selectedFarmType by remember { mutableStateOf("") }
@@ -38,6 +42,7 @@ fun AlreadyFarmerScreen(modifier: Modifier = Modifier) {
     val farmTypes = listOf("Dairy", "Poultry", "Crop", "Fishery")
     val cities = listOf("Hargeisa", "Gabilay", "Salaxlay", "Arabsiyo")
 
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -77,10 +82,13 @@ fun AlreadyFarmerScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Button(onClick = {
+        CustomDefaultBtn(
+            shapeSize = 50f,
+            btnText = "Submit"
+        ) {
             // Handle form submission
-        }) {
-            Text(text = "Submit")
+            navController.navigate("dashboard")
+            Toast.makeText(context, "Form submitted successfully", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.khadarmustafe.agroconsult.ui.home.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ import com.khadarmustafe.agroconsult.components.CustomDefaultBtn
 fun TextScreen(title: String, navController: NavController) {
     var text by remember { mutableStateOf("") }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -76,6 +78,8 @@ fun TextScreen(title: String, navController: NavController) {
                 Spacer(modifier = Modifier.height(30.dp))
                 CustomDefaultBtn(shapeSize = 50f, btnText = "Send") {
                     // Handle send button click
+                    Toast.makeText(context, "Data Send successfully", Toast.LENGTH_SHORT).show()
+                    navController.navigate("send_successfully")
                 }
             }
         }

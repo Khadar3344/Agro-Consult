@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.khadarmustafe.agroconsult.R
 import com.khadarmustafe.agroconsult.components.DashboardCard
+import com.khadarmustafe.agroconsult.ui.theme.primaryLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +34,7 @@ fun DashboardScreen(navController: NavHostController) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Hello Username",
+                        text = "Hello User",
                         fontSize = 18.sp,
                         modifier = Modifier.padding(10.dp)
                     )
@@ -54,7 +55,11 @@ fun DashboardScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Welcome to AgroConsult", fontSize = 24.sp)
+                Text(
+                    text = "Welcome to AgroConsult",
+                    fontSize = 32.sp,
+                    color = primaryLight
+                )
                 Spacer(modifier = Modifier.height(20.dp))
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)

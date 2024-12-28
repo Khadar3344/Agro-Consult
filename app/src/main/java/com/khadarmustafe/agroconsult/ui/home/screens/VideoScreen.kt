@@ -1,5 +1,6 @@
 package com.khadarmustafe.agroconsult.ui.home.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,7 @@ import com.khadarmustafe.agroconsult.components.CustomDefaultBtn
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoScreen(title: String, navController: NavController) {
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -85,6 +88,8 @@ fun VideoScreen(title: String, navController: NavController) {
                 Spacer(modifier = Modifier.height(30.dp))
                 CustomDefaultBtn(shapeSize = 50f, btnText = "Send") {
                     // Handle send button click
+                    Toast.makeText(context, "Data Send successfully", Toast.LENGTH_SHORT).show()
+                    navController.navigate("send_successfully")
                 }
             }
         }

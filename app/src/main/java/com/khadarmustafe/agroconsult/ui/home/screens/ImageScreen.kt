@@ -1,6 +1,7 @@
 package com.khadarmustafe.agroconsult.ui.home.screens
 
 import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,8 +31,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,6 +44,7 @@ fun ImageScreen(
     navController: NavController,
     bitmap: Bitmap?
 ) {
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -102,11 +101,13 @@ fun ImageScreen(
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 CustomDefaultBtn(shapeSize = 50f, btnText = "Upload") {
-                    // Handle upload button click
+                    Toast.makeText(context, "Form Upload successfully", Toast.LENGTH_SHORT).show()
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 CustomDefaultBtn(shapeSize = 50f, btnText = "Send") {
                     // Handle send button click
+                    Toast.makeText(context, "Data Send successfully", Toast.LENGTH_SHORT).show()
+                    navController.navigate("send_successfully")
                 }
             }
         }

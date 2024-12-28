@@ -11,12 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.khadarmustafe.agroconsult.R
 import com.khadarmustafe.agroconsult.components.CustomAppBar
 import com.khadarmustafe.agroconsult.components.CustomDefaultBtn
 
 @Composable
-fun UserTypeScreen() {
+fun UserTypeScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -24,26 +25,20 @@ fun UserTypeScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CustomAppBar(
-            onBackBtnClick = { /* Handle back button click */ },
+            onBackBtnClick = { navController.navigateUp() },
             appBarTitle = "User Type"
         )
         Spacer(modifier = Modifier.height(120.dp))
         CustomDefaultBtn(
             shapeSize = 50f,
             btnText = stringResource(R.string.new_farmer)
-        ) { }
+        ) { navController.navigate("new_farmer") }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         CustomDefaultBtn(
             shapeSize = 50f,
             btnText = stringResource(R.string.already_farmer)
-        ) { }
+        ) { navController.navigate("already_farmer") }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun UserTypeScreenPreview() {
-    UserTypeScreen()
 }

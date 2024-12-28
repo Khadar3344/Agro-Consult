@@ -1,13 +1,11 @@
 package com.khadarmustafe.agroconsult.ui.auth.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -16,40 +14,44 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.khadarmustafe.agroconsult.R
+import com.khadarmustafe.agroconsult.components.CustomDefaultBtn
 import com.khadarmustafe.agroconsult.components.CustomTextField
 import com.khadarmustafe.agroconsult.components.ErrorSuggestion
+import com.khadarmustafe.agroconsult.ui.theme.primaryLight
 
 
 @Composable
-fun SignInScreen(/*navController: NavHostController*/) {
-    var name by remember { mutableStateOf(TextFieldValue("")) }
+fun SignInScreen(navController: NavHostController) {
     var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
-    var confirmPassword by remember { mutableStateOf(TextFieldValue("")) }
     var error by remember { mutableStateOf("") }
-    val emailErrorState = remember { mutableStateOf(false) }
     val passwordErrorState = remember { mutableStateOf(false) }
-    val conPasswordErrorState = remember { mutableStateOf(false) }
-    val nameErrorState = remember { mutableStateOf(false) }
     val phoneNumberErrorState = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(stringResource(R.string.sign_in), style = MaterialTheme.typography.bodyLarge)
+        Spacer(modifier = Modifier.height(40.dp))
+        Text(
+            text = stringResource(R.string.sign_in),
+            style = MaterialTheme.typography.bodyLarge,
+            fontSize = 34.sp,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
         Spacer(modifier = Modifier.height(16.dp))
         CustomTextField(
             trailingIcon = R.drawable.phone,
@@ -74,52 +76,37 @@ fun SignInScreen(/*navController: NavHostController*/) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         when {
-            nameErrorState.value -> {
-                ErrorSuggestion(message = "Please enter valid name.")
-            }
             phoneNumberErrorState.value -> {
                 ErrorSuggestion(message = "Please enter valid number.")
-            }
-            emailErrorState.value -> {
-                ErrorSuggestion(message = "Please enter valid email address.")
             }
             passwordErrorState.value -> {
                 ErrorSuggestion(message = "Please enter valid password.")
             }
-            conPasswordErrorState.value -> {
-                ErrorSuggestion(message = "Confirm Password miss matched.")
-            }
         }
-        Button(
-            onClick = {
-                if (name.text.isEmpty() || password.text.isEmpty() || confirmPassword.text.isEmpty()) {
-                    error = "Please fill in all fields"
-                } else if (password != confirmPassword) {
-                    error = "Passwords do not match"
-                } else {
-                    error = "Sign Up Successful!" // Placeholder logic
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
+        Spacer(modifier = Modifier.height(10.dp))
+        CustomDefaultBtn(
+            shapeSize = 50f,
+            btnText = stringResource(R.string.sign_in)
         ) {
-            Text("Sign Up")
+            if (phoneNumber.text.isNotEmpty() && password.text.isNotEmpty()) {
+                navController.navigate("dashboard")
+            } else {
+                error = "Please fill in all fields"
+            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         TextButton(
-            onClick = { /*navController.navigate("signin")*/ },
+            onClick = { navController.navigate("sign_up") },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Don't has account? Sign Up")
+            Text(
+                text = "Don't has account? Sign Up",
+                color = primaryLight
+            )
         }
         if (error.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(error, color = MaterialTheme.colorScheme.error)
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun DefaultPreview() {
-    SignInScreen()
 }
