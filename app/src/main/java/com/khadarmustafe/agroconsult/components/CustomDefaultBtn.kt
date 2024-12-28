@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.khadarmustafe.agroconsult.ui.theme.primaryLight
 
 @Composable
 fun CustomDefaultBtn(
@@ -31,7 +32,8 @@ fun CustomDefaultBtn(
             onClick()
         },
         colors = ButtonDefaults.buttonColors(
-            contentColor = Color.White
+            contentColor = Color.White,
+            containerColor = primaryLight
         ),
     ) {
         Text(text = btnText, fontSize = 16.sp)
