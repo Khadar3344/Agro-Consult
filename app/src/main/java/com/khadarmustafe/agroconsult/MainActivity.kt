@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -23,20 +25,34 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.video.AudioConfig
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.khadarmustafe.agroconsult.navigation.AppNavigation
 import com.khadarmustafe.agroconsult.ui.home.viewmodel.CameraViewModel
 import com.khadarmustafe.agroconsult.ui.theme.AgroConsultTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
+import java.io.IOException
 
 class MainActivity : ComponentActivity() {
 
     private var recording: Recording? = null
 
     private val cameraViewModel: CameraViewModel by viewModels()
+
+    private var mediaRecorder: MediaRecorder? = null
+    private var mediaPlayer: MediaPlayer? = null
+    private var audioFile: File? = null
+
+    private var recordingStartTime = 0L
+    private var recordingLength = 0L
+    private val recordingTime = mutableLongStateOf(0L)
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +81,26 @@ class MainActivity : ComponentActivity() {
                         },
                         recordingVideo = {
                             recordVideo(controller)
-                        }
+                        },
+                        onStartRecording = {
+                            Toast.makeText(this, "Voice recording started", Toast.LENGTH_SHORT).show()
+                            startRecording()
+                        },
+                        onStopRecording = {
+                            Toast.makeText(this, "Voice recording stopped", Toast.LENGTH_SHORT).show()
+                            stopRecording()
+                        },
+                        onPlayRecording = {
+                            playRecording()
+                        },
+                        onStopPlayback = {
+                            stopPlayback()
+                        },
+                        onSendRecording = {
+                            sendRecording(it)
+                        },
+                        recordingTime = recordingTime.longValue,
+                        recordingLength = recordingLength
                     )
                 }
 
@@ -158,6 +193,75 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun startRecording() {
+        audioFile = File.createTempFile("audio_", ".3gp", cacheDir)
+        mediaRecorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setOutputFile(audioFile?.absolutePath)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            try {
+                prepare()
+                start()
+                recordingStartTime = System.currentTimeMillis()
+                lifecycleScope.launch(Dispatchers.Default) {
+                    while (mediaRecorder != null) {
+                        recordingTime.value = System.currentTimeMillis() - recordingStartTime
+                        kotlinx.coroutines.delay(100)
+                    }
+                }
+                Toast.makeText(this@MainActivity, "Recording started", Toast.LENGTH_SHORT).show()
+            } catch (e: IOException) {
+                Toast.makeText(this@MainActivity, "Recording failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun stopRecording() {
+        mediaRecorder?.apply {
+            stop()
+            release()
+        }
+        mediaRecorder = null
+        recordingLength = System.currentTimeMillis() - recordingStartTime
+        recordingTime.value = 0L
+        Toast.makeText(this@MainActivity, "Recording saved: ${audioFile?.absolutePath}", Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun playRecording() {
+        if (audioFile?.exists() == true) {
+            mediaPlayer = MediaPlayer().apply {
+                try {
+                    setDataSource(audioFile?.absolutePath)
+                    prepare()
+                    start()
+                    Toast.makeText(this@MainActivity, "Playing recording", Toast.LENGTH_SHORT).show()
+                } catch (e: IOException) {
+                    Toast.makeText(this@MainActivity, "Playback failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun stopPlayback() {
+        mediaPlayer?.apply {
+            stop()
+            release()
+        }
+        mediaPlayer = null
+    }
+
+    private fun sendRecording(filePath: String?) {
+        if (filePath == null) {
+            Toast.makeText(this, "No recording available to send", Toast.LENGTH_SHORT).show()
+            return
+        }
+        // Logic to send the recording (e.g., share intent or upload to server)
+        Toast.makeText(this, "Sending recording: $filePath", Toast.LENGTH_SHORT).show()
+    }
+
 
     private fun takePhoto(
         controller: LifecycleCameraController,
